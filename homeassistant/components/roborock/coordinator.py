@@ -760,6 +760,8 @@ class RoborockB01Q10UpdateCoordinator(DataUpdateCoordinator[None]):
         self._device = device
         self.api = api
         self.device_info = get_device_info(device)
+        self._history_clean_count: int | None = None
+        self._history_requested = False
 
     @override
     async def _async_update_data(self) -> None:
@@ -777,6 +779,24 @@ class RoborockB01Q10UpdateCoordinator(DataUpdateCoordinator[None]):
                 translation_domain=DOMAIN,
                 translation_key="request_fail",
             ) from ex
+        await self._async_request_clean_history()
+
+    async def _async_request_clean_history(self) -> None:
+        """Request the clean records at startup and whenever a clean finished.
+
+        The device answers asynchronously on the subscribe stream, and the
+        clean history trait notifies its listeners once the records arrive.
+        """
+        clean_count = self.api.status.total_clean_count
+        if self._history_requested and clean_count == self._history_clean_count:
+            return
+        try:
+            await self.api.clean_history.refresh()
+        except RoborockException as ex:
+            _LOGGER.debug("Failed to request Q10 clean history: %s", ex)
+            return
+        self._history_requested = True
+        self._history_clean_count = clean_count
 
     @cached_property
     def duid(self) -> str:

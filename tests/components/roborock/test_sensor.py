@@ -10,6 +10,7 @@ from pytest_homeassistant.common import (
     async_fire_time_changed,
     snapshot_platform,
 )
+from roborock.data import YXCleaningResult, YXFault
 from roborock.data.v1 import RoborockDockTypeCode
 from roborock.device_features import RoborockDockFeatures
 from roborock.exceptions import RoborockException
@@ -332,3 +333,45 @@ async def test_dyad_availability_follows_last_message(
     await hass.async_block_till_done()
 
     assert hass.states.get("sensor.dyad_pro_battery").state == expected_state
+
+
+async def test_q10_vacuum_error_and_last_clean(
+    hass: HomeAssistant,
+    setup_entry: MockConfigEntry,
+    fake_q10_vacuum: FakeDevice,
+) -> None:
+    """Test the Q10 error and last clean sensors use the V1 states."""
+    api = fake_q10_vacuum.b01_q10_properties
+    assert hass.states.get("sensor.roborock_q10_s5_vacuum_error").state == "none"
+    assert (
+        hass.states.get("sensor.roborock_q10_s5_last_clean_result").state
+        == "finished_cleaning"
+    )
+    assert (
+        hass.states.get("sensor.roborock_q10_s5_last_clean_begin").state
+        == "2025-11-16T21:15:08+00:00"
+    )
+
+    # Faults with a V1 equivalent use the V1 state
+    api.status.fault = YXFault.DOCKING_ERROR
+    api.status._notify_update()
+    await hass.async_block_till_done()
+    assert (
+        hass.states.get("sensor.roborock_q10_s5_vacuum_error").state
+        == "return_to_dock_fail"
+    )
+
+    # Lifecycle notices are not errors
+    api.status.fault = YXFault.CLEANING_COMPLETED_RETURNING
+    api.status._notify_update()
+    await hass.async_block_till_done()
+    assert hass.states.get("sensor.roborock_q10_s5_vacuum_error").state == "none"
+
+    # A newer record pushed by the device replaces the last clean
+    record = api.clean_history.records[0]
+    record.cleaning_result = YXCleaningResult.STOPPED
+    api.clean_history._notify_update()
+    await hass.async_block_till_done()
+    assert (
+        hass.states.get("sensor.roborock_q10_s5_last_clean_result").state == "stopped"
+    )

@@ -42,6 +42,7 @@ from roborock.device_features import RoborockDockFeatures
 from roborock.devices.device import RoborockDevice
 from roborock.devices.device_manager import DeviceManager
 from roborock.devices.traits.b01 import Q7PropertiesApi
+from roborock.devices.traits.b01.q10.clean_history import CleanHistoryTrait
 from roborock.devices.traits.b01.q10.status import StatusTrait as Q10StatusTrait
 from roborock.devices.traits.common import DpsDataConverter
 from roborock.devices.traits.v1 import PropertiesApi
@@ -91,6 +92,7 @@ from .mock_data import (
     MULTI_MAP_LIST,
     NETWORK_INFO_BY_DEVICE,
     Q7_B01_PROPS,
+    Q10_CLEAN_RECORD,
     Q10_STATUS,
     ROBOROCK_RRUID,
     ROOM_MAPPING,
@@ -266,6 +268,9 @@ def create_b01_q10_trait() -> Mock:
             setattr(status, attr_name, value)
     status.not_disturb = True
     q10_trait.status = status
+
+    q10_trait.clean_history = CleanHistoryTrait(AsyncMock())
+    q10_trait.clean_history.records = [deepcopy(Q10_CLEAN_RECORD)]
 
     q10_trait.vacuum = AsyncMock()
     q10_trait.command = AsyncMock()

@@ -15,6 +15,7 @@ from roborock.data import (
     UserData,
     ValleyElectricityTimer,
     WorkStatusMapping,
+    YXFault,
 )
 from roborock.data.b01_q7.b01_q7_code_mappings import CleanRepeatMapping
 from roborock.data.b01_q10.b01_q10_code_mappings import (
@@ -24,6 +25,7 @@ from roborock.data.b01_q10.b01_q10_code_mappings import (
 )
 from roborock.data.b01_q10.b01_q10_containers import Q10Status
 from roborock.data.v1.v1_containers import StatusV2
+from roborock.devices.traits.b01.q10.clean_history import CleanRecordConverter
 from vacuum_map_parser_base.config.image_config import ImageConfig
 from vacuum_map_parser_base.map_data import ImageData
 from vacuum_map_parser_roborock.map_data_parser import MapData
@@ -1628,4 +1630,10 @@ Q10_STATUS = Q10Status(
     side_brush_life=90,
     filter_life=90,
     sensor_life=28,
+    fault=YXFault.NONE,
+)
+
+# A completed vacuum and mop clean: 15 minutes, 9 m2, started from the app.
+Q10_CLEAN_RECORD = CleanRecordConverter.parse_record(
+    "1763327708_1763327708_15_9_1024_2048_0_1_1_1_1_1"
 )

@@ -19,7 +19,12 @@ from roborock.data import (
     ZeoError,
     ZeoState,
 )
-from roborock.data.b01_q10.b01_q10_code_mappings import YXDeviceState
+from roborock.data.b01_q10.b01_q10_code_mappings import (
+    YXCleaningResult,
+    YXDeviceState,
+    YXFault,
+)
+from roborock.data.b01_q10.b01_q10_containers import Q10CleanRecord
 from roborock.data.v1.v1_containers import StatusField, StatusV2
 from roborock.devices.traits.b01.q10.status import StatusTrait as Q10StatusTrait
 from roborock.devices.traits.v1 import PropertiesApi
@@ -94,6 +99,13 @@ class RoborockSensorDescriptionB01(SensorEntityDescription):
     """A class that describes Roborock B01 sensors."""
 
     value_fn: Callable[[B01Props], StateType]
+
+
+@dataclass(frozen=True, kw_only=True)
+class RoborockSensorDescriptionQ10CleanRecord(SensorEntityDescription):
+    """A class that describes Roborock Q10 sensors based on the last clean record."""
+
+    value_fn: Callable[[Q10CleanRecord], StateType | dt.datetime]
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -459,6 +471,72 @@ Q7_B01_SENSOR_DESCRIPTIONS = [
 ]
 
 
+# Q10 faults mapped to the V1 vacuum error states where they mean the same thing.
+# Lifecycle notices the device also reports as faults (scheduled clean starting,
+# cleaning completed and returning, ...) are not errors and map to "none".
+Q10_FAULT_TO_VACUUM_ERROR: dict[YXFault, str] = {
+    YXFault.NONE: "none",
+    YXFault.LIDAR_BLOCKED: "lidar_blocked",
+    YXFault.BUMPER_STUCK: "bumper_stuck",
+    YXFault.ROBOT_SUSPENDED: "wheels_suspended",
+    YXFault.CLIFF_SENSOR_ERROR: "cliff_sensor_error",
+    YXFault.MAIN_BRUSH_STUCK: "main_brush_jammed",
+    YXFault.MAIN_WHEELS_STUCK: "wheels_jammed",
+    YXFault.ROBOT_TRAPPED: "robot_trapped",
+    YXFault.CHECK_DUSTBIN_FILTER: "check_dustbin_filter",
+    YXFault.LOW_BATTERY: "low_battery",
+    YXFault.TEMPERATURE_THRESHOLD: "temperature_protection",
+    YXFault.ROBOT_TILTED: "robot_tilted",
+    YXFault.LIDAR_COVER_OBSTRUCTED: "lidar_blocked",
+    YXFault.NO_GO_ZONE_DETECTED: "nogo_zone_detected",
+    YXFault.MOPPING_MODULE_STUCK: "mopping_module_stuck",
+    YXFault.CARPET_AVOIDANCE: "carpet_avoidance",
+    YXFault.CANNOT_CROSS_CARPET: "cannot_cross_carpet",
+    YXFault.INSTALL_DUST_BAG: "install_dust_bag",
+    YXFault.MOP_MOUNT_FELL_OFF: "mop_mount_fell_off",
+    YXFault.LIDAR_DIRTY: "lidar_dirty",
+    YXFault.FILTER_SERVICE_LIFE: "filter_service_life",
+    YXFault.MAIN_BRUSH_SERVICE_LIFE: "main_brush_service_life",
+    YXFault.SIDE_BRUSH_SERVICE_LIFE: "side_brush_service_life",
+    YXFault.SENSOR_NEEDS_CLEANING: "sensor_needs_cleaning",
+    YXFault.DUST_BAG_FULL: "dust_bag_full",
+    YXFault.STARTING_SCHEDULED_CLEAN: "none",
+    YXFault.CLEANING_IN_PROGRESS: "none",
+    YXFault.EMPTY_DUSTBIN: "empty_dustbin",
+    YXFault.CLEANING_COMPLETED_RETURNING: "none",
+    YXFault.LOW_BATTERY_RESUME: "none",
+    YXFault.DOCKING_ERROR: "return_to_dock_fail",
+    YXFault.POSITIONING_FAILED: "positioning_failed",
+    YXFault.TOO_FREQUENT_EMPTYING: "too_frequent_emptying",
+    YXFault.CANNOT_REACH_TARGET: "cannot_reach_target",
+    YXFault.OFFLINE_WARNING_ASLEEP: "none",
+    YXFault.OFFLINE_WARNING_LOW_BATTERY: "low_battery",
+    YXFault.DND_AUTO_TOPUP_DISABLED: "none",
+    YXFault.CLEAN_CARPET_ULTRASONIC_SENSORS: "clean_carpet_sensors",
+    YXFault.ROBOT_ERROR_RESET: "none",
+    YXFault.VOICE_PACK_UPDATE_AVAILABLE: "none",
+}
+
+# Q10 clean results mapped to the V1 last clean result states.
+Q10_CLEANING_RESULT_TO_LAST_CLEAN_RESULT: dict[YXCleaningResult, str] = {
+    YXCleaningResult.COMPLETED: "finished_cleaning",
+    YXCleaningResult.INTERRUPTED: "cleanup_interrupted",
+    YXCleaningResult.STOPPED: "stopped",
+}
+
+
+def _q10_vacuum_error_value_fn(data: Q10StatusTrait) -> str | None:
+    if data.fault is None:
+        return None
+    return Q10_FAULT_TO_VACUUM_ERROR.get(data.fault)
+
+
+def _q10_last_clean_result_value_fn(record: Q10CleanRecord) -> str | None:
+    if record.cleaning_result is None:
+        return None
+    return Q10_CLEANING_RESULT_TO_LAST_CLEAN_RESULT.get(record.cleaning_result)
+
+
 Q10_B01_SENSOR_DESCRIPTIONS = [
     RoborockSensorDescriptionQ10(
         key="status",
@@ -467,6 +545,14 @@ Q10_B01_SENSOR_DESCRIPTIONS = [
         value_fn=lambda data: data.status.value if data.status is not None else None,
         entity_category=EntityCategory.DIAGNOSTIC,
         options=YXDeviceState.keys(),
+    ),
+    RoborockSensorDescriptionQ10(
+        key="vacuum_error",
+        translation_key="vacuum_error",
+        device_class=SensorDeviceClass.ENUM,
+        value_fn=_q10_vacuum_error_value_fn,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        options=list(dict.fromkeys(Q10_FAULT_TO_VACUUM_ERROR.values())),
     ),
     RoborockSensorDescriptionQ10(
         key="battery",
@@ -557,6 +643,24 @@ Q10_B01_SENSOR_DESCRIPTIONS = [
     ),
 ]
 
+Q10_B01_CLEAN_RECORD_SENSOR_DESCRIPTIONS = [
+    RoborockSensorDescriptionQ10CleanRecord(
+        key="last_clean_start",
+        translation_key="last_clean_start",
+        value_fn=lambda record: record.start_datetime,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        device_class=SensorDeviceClass.TIMESTAMP,
+    ),
+    RoborockSensorDescriptionQ10CleanRecord(
+        key="last_clean_result",
+        translation_key="last_clean_result",
+        device_class=SensorDeviceClass.ENUM,
+        value_fn=_q10_last_clean_result_value_fn,
+        entity_category=EntityCategory.DIAGNOSTIC,
+        options=list(Q10_CLEANING_RESULT_TO_LAST_CLEAN_RESULT.values()),
+    ),
+]
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -608,6 +712,10 @@ async def async_setup_entry(
             entities.extend(
                 RoborockSensorEntityB01Q10(coordinator, description)
                 for description in Q10_B01_SENSOR_DESCRIPTIONS
+            )
+            entities.extend(
+                RoborockCleanRecordSensorEntityB01Q10(coordinator, description)
+                for description in Q10_B01_CLEAN_RECORD_SENSOR_DESCRIPTIONS
             )
             entities.append(RoborockCurrentRoomQ10(coordinator))
         async_add_entities(entities)
@@ -799,3 +907,38 @@ class RoborockSensorEntityB01Q10(RoborockCoordinatedEntityB01Q10, SensorEntity):
     def native_value(self) -> StateType:
         """Return the value reported by the sensor."""
         return self.entity_description.value_fn(self.coordinator.api.status)
+
+
+class RoborockCleanRecordSensorEntityB01Q10(
+    RoborockCoordinatedEntityB01Q10, SensorEntity
+):
+    """Representation of a B01 Q10 Roborock sensor based on the last clean record."""
+
+    entity_description: RoborockSensorDescriptionQ10CleanRecord
+
+    def __init__(
+        self,
+        coordinator: RoborockB01Q10UpdateCoordinator,
+        description: RoborockSensorDescriptionQ10CleanRecord,
+    ) -> None:
+        """Initialize the entity."""
+        self.entity_description = description
+        super().__init__(f"{description.key}_{coordinator.duid_slug}", coordinator)
+
+    @override
+    async def async_added_to_hass(self) -> None:
+        """Register trait listener for push-based clean record updates."""
+        await super().async_added_to_hass()
+        self.async_on_remove(
+            self.coordinator.api.clean_history.add_update_listener(
+                self.async_write_ha_state
+            )
+        )
+
+    @property
+    @override
+    def native_value(self) -> StateType | dt.datetime:
+        """Return the value reported by the sensor."""
+        if (record := self.coordinator.api.clean_history.last_record) is None:
+            return None
+        return self.entity_description.value_fn(record)

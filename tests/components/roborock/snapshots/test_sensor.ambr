@@ -732,6 +732,119 @@
     'state': '90',
   })
 # ---
+# name: test_sensors[sensor.roborock_q10_s5_last_clean_begin-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': None,
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('roborock', 'q10_duid')]>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.roborock_q10_s5_last_clean_begin',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Last clean begin',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.TIMESTAMP: 'timestamp'>,
+    'original_icon': None,
+    'original_name': 'Last clean begin',
+    'platform': 'roborock',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'last_clean_start',
+    'unique_id': 'last_clean_start_q10_duid',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.roborock_q10_s5_last_clean_begin-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'timestamp',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock Q10 S5+ Last clean begin',
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.roborock_q10_s5_last_clean_begin',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': '2025-11-16T21:15:08+00:00',
+  })
+# ---
+# name: test_sensors[sensor.roborock_q10_s5_last_clean_result-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'finished_cleaning',
+        'cleanup_interrupted',
+        'stopped',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('roborock', 'q10_duid')]>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.roborock_q10_s5_last_clean_result',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Last clean result',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Last clean result',
+    'platform': 'roborock',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'last_clean_result',
+    'unique_id': 'last_clean_result_q10_duid',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.roborock_q10_s5_last_clean_result-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock Q10 S5+ Last clean result',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'finished_cleaning',
+        'cleanup_interrupted',
+        'stopped',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.roborock_q10_s5_last_clean_result',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'finished_cleaning',
+  })
+# ---
 # name: test_sensors[sensor.roborock_q10_s5_main_brush_time_used-entry]
   EntityRegistryEntrySnapshot({
     'aliases': list([
@@ -1157,6 +1270,122 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': 'unknown',
+  })
+# ---
+# name: test_sensors[sensor.roborock_q10_s5_vacuum_error-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'none',
+        'lidar_blocked',
+        'bumper_stuck',
+        'wheels_suspended',
+        'cliff_sensor_error',
+        'main_brush_jammed',
+        'wheels_jammed',
+        'robot_trapped',
+        'check_dustbin_filter',
+        'low_battery',
+        'temperature_protection',
+        'robot_tilted',
+        'nogo_zone_detected',
+        'mopping_module_stuck',
+        'carpet_avoidance',
+        'cannot_cross_carpet',
+        'install_dust_bag',
+        'mop_mount_fell_off',
+        'lidar_dirty',
+        'filter_service_life',
+        'main_brush_service_life',
+        'side_brush_service_life',
+        'sensor_needs_cleaning',
+        'dust_bag_full',
+        'empty_dustbin',
+        'return_to_dock_fail',
+        'positioning_failed',
+        'too_frequent_emptying',
+        'cannot_reach_target',
+        'clean_carpet_sensors',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('roborock', 'q10_duid')]>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.roborock_q10_s5_vacuum_error',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Vacuum error',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Vacuum error',
+    'platform': 'roborock',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'vacuum_error',
+    'unique_id': 'vacuum_error_q10_duid',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.roborock_q10_s5_vacuum_error-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock Q10 S5+ Vacuum error',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'none',
+        'lidar_blocked',
+        'bumper_stuck',
+        'wheels_suspended',
+        'cliff_sensor_error',
+        'main_brush_jammed',
+        'wheels_jammed',
+        'robot_trapped',
+        'check_dustbin_filter',
+        'low_battery',
+        'temperature_protection',
+        'robot_tilted',
+        'nogo_zone_detected',
+        'mopping_module_stuck',
+        'carpet_avoidance',
+        'cannot_cross_carpet',
+        'install_dust_bag',
+        'mop_mount_fell_off',
+        'lidar_dirty',
+        'filter_service_life',
+        'main_brush_service_life',
+        'side_brush_service_life',
+        'sensor_needs_cleaning',
+        'dust_bag_full',
+        'empty_dustbin',
+        'return_to_dock_fail',
+        'positioning_failed',
+        'too_frequent_emptying',
+        'cannot_reach_target',
+        'clean_carpet_sensors',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.roborock_q10_s5_vacuum_error',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'none',
   })
 # ---
 # name: test_sensors[sensor.roborock_q7_battery-entry]

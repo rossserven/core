@@ -1538,6 +1538,7 @@
             'cleanCount': 1,
             'cleanTime': 1800,
             'fanLevel': 'balanced',
+            'fault': 'none',
             'filterLife': 90,
             'mainBrushLife': 81,
             'sensorLife': 28,
