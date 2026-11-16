@@ -81,6 +81,9 @@
       "last_clean_end": {
         "default": "mdi:clock-time-twelve"
       },
+      "last_clean_result": {
+        "default": "mdi:flag-checkered"
+      },
       "last_clean_start": {
         "default": "mdi:clock-time-twelve"
       },

@@ -2208,6 +2208,86 @@
     'state': '2023-01-01T03:43:58+00:00',
   })
 # ---
+# name: test_sensors[sensor.roborock_s7_2_last_clean_result-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'manual_interrupt',
+        'cleanup_interrupted',
+        'breakpoint',
+        'locate_fail',
+        'finished_cleaning',
+        'area_unreachable',
+        'washing_error',
+        'back_to_wash_failure',
+        'patrol_success',
+        'patrol_fail',
+        'pet_patrol_success',
+        'pet_patrol_fail',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('roborock', 'device_2')]>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.roborock_s7_2_last_clean_result',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Last clean result',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Last clean result',
+    'platform': 'roborock',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'last_clean_result',
+    'unique_id': 'last_clean_result_device_2',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.roborock_s7_2_last_clean_result-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock S7 2 Last clean result',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'manual_interrupt',
+        'cleanup_interrupted',
+        'breakpoint',
+        'locate_fail',
+        'finished_cleaning',
+        'area_unreachable',
+        'washing_error',
+        'back_to_wash_failure',
+        'patrol_success',
+        'patrol_fail',
+        'pet_patrol_success',
+        'pet_patrol_fail',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.roborock_s7_2_last_clean_result',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'finished_cleaning',
+  })
+# ---
 # name: test_sensors[sensor.roborock_s7_2_main_brush_time_left-entry]
   EntityRegistryEntrySnapshot({
     'aliases': list([
@@ -3467,6 +3547,86 @@
     'last_reported': <ANY>,
     'last_updated': <ANY>,
     'state': '2023-01-01T03:43:58+00:00',
+  })
+# ---
+# name: test_sensors[sensor.roborock_s7_maxv_last_clean_result-entry]
+  EntityRegistryEntrySnapshot({
+    'aliases': list([
+      None,
+    ]),
+    'area_id': None,
+    'capabilities': dict({
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'manual_interrupt',
+        'cleanup_interrupted',
+        'breakpoint',
+        'locate_fail',
+        'finished_cleaning',
+        'area_unreachable',
+        'washing_error',
+        'back_to_wash_failure',
+        'patrol_success',
+        'patrol_fail',
+        'pet_patrol_success',
+        'pet_patrol_fail',
+      ]),
+    }),
+    'config_entry_id': <ANY>,
+    'config_subentry_id': None,
+    'device_class': None,
+    'device_id': <DeviceEntry identifiers=[('roborock', 'abc123')]>,
+    'disabled_by': None,
+    'domain': 'sensor',
+    'entity_category': <EntityCategory.DIAGNOSTIC: 'diagnostic'>,
+    'entity_id': 'sensor.roborock_s7_maxv_last_clean_result',
+    'has_entity_name': True,
+    'hidden_by': None,
+    'icon': None,
+    'id': <ANY>,
+    'labels': set({
+    }),
+    'name': None,
+    'object_id_base': 'Last clean result',
+    'options': dict({
+    }),
+    'original_device_class': <SensorDeviceClass.ENUM: 'enum'>,
+    'original_icon': None,
+    'original_name': 'Last clean result',
+    'platform': 'roborock',
+    'previous_unique_id': None,
+    'suggested_object_id': None,
+    'supported_features': 0,
+    'translation_key': 'last_clean_result',
+    'unique_id': 'last_clean_result_abc123',
+    'unit_of_measurement': None,
+  })
+# ---
+# name: test_sensors[sensor.roborock_s7_maxv_last_clean_result-state]
+  StateSnapshot({
+    'attributes': ReadOnlyDict({
+      <EntityStateAttribute.DEVICE_CLASS: 'device_class'>: 'enum',
+      <EntityStateAttribute.FRIENDLY_NAME: 'friendly_name'>: 'Roborock S7 MaxV Last clean result',
+      <SensorEntityCapabilityAttribute.OPTIONS: 'options'>: list([
+        'manual_interrupt',
+        'cleanup_interrupted',
+        'breakpoint',
+        'locate_fail',
+        'finished_cleaning',
+        'area_unreachable',
+        'washing_error',
+        'back_to_wash_failure',
+        'patrol_success',
+        'patrol_fail',
+        'pet_patrol_success',
+        'pet_patrol_fail',
+      ]),
+    }),
+    'context': <ANY>,
+    'entity_id': 'sensor.roborock_s7_maxv_last_clean_result',
+    'last_changed': <ANY>,
+    'last_reported': <ANY>,
+    'last_updated': <ANY>,
+    'state': 'finished_cleaning',
   })
 # ---
 # name: test_sensors[sensor.roborock_s7_maxv_main_brush_time_left-entry]

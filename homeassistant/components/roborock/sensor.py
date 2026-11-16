@@ -13,6 +13,7 @@ from roborock.data import (
     RoborockDockTypeCode,
     RoborockDyadStateCode,
     RoborockErrorCode,
+    RoborockFinishReason,
     RoborockStateCode,
     WorkStatusMapping,
     ZeoError,
@@ -253,6 +254,19 @@ SENSOR_DESCRIPTIONS = [
         ),
         entity_category=EntityCategory.DIAGNOSTIC,
         device_class=SensorDeviceClass.TIMESTAMP,
+    ),
+    RoborockSensorDescription(
+        key="last_clean_result",
+        translation_key="last_clean_result",
+        device_class=SensorDeviceClass.ENUM,
+        value_fn=lambda data: (
+            data.clean_summary.last_clean_record.finish_reason.display_name
+            if data.clean_summary.last_clean_record is not None
+            and data.clean_summary.last_clean_record.finish_reason is not None
+            else None
+        ),
+        entity_category=EntityCategory.DIAGNOSTIC,
+        options=RoborockFinishReason.keys(),
     ),
     RoborockSensorDescription(
         key="clean_percent",
